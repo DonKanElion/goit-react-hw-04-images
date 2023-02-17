@@ -98,8 +98,8 @@ export class App extends Component {
           notifyWarning={this.notifyWarning}
 
           // isSubmitting={isLoading}
-        ></Searchbar>
-
+        ></Searchbar>      
+            
         {total > 0 && <ImageGallery images={this.state.images} />}
 
         {/* {isLoading && <Loader/>}
