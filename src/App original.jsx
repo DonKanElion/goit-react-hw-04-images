@@ -45,48 +45,39 @@ export class App extends Component {
     console.log(this.state.page);
   }
 
-  async componentDidUpdate(_, prevState) {
-    const { searchValue, page } = this.state;
+  //   async componentDidUpdate(_, prevState) {
 
-    if (prevState.searchValue !== searchValue) {
-      this.setState({ isLoading: true });
+  //   if (prevState.searchValue !== searchValue || prevState.page !== page) {
+  //     setIsloading(true);
 
-      try {
-        const response = await fetchImages(searchValue, page);
+  //     try {
+  //       const response = await fetchImages(searchValue, page);
 
-        if (response.total === 0) {
-          this.notifyWarning(
-            'Sorry, nothing was found for your request, try something else.'
-          );
-        }
+  //       if (response.total === 0) {
+  //         notifyWarning(
+  //           'Sorry, nothing was found for your request, try something else.'
+  //         );
+  //       }
 
-        return this.setState({ images: response.hits, total: response.total });
-      } catch (error) {
-        this.notifyError();
-        return console.log(error);
-      } finally {
-        this.setState({ isLoading: false });
-      }
-    }
+  //       if (prevState.searchValue !== searchValue) {
 
-    if (prevState.page !== page) {
-      this.setState({ isLoading: true });
+  //         setImages([response.hits]);
+  //         setTotal(response.total);
+  //        return;
+  //       }
 
-      try {
-        const response = await fetchImages(searchValue, page);
-        const newPage = response.hits;
+  //       const newPage = response.hits;
 
-        this.setState(prevState => ({
-          images: [...prevState.images, ...newPage],
-        }));
-      } catch (error) {
-        this.notifyError();
-        return console.log(error);
-      } finally {
-        this.setState({ isLoading: false });
-      }
-    }
-  }
+  //       return setImages(prevState => ([...prevState, ...newPage]
+  //       ));
+  //     } catch (error) {
+  //       notifyError();
+  //       return console.log(error);
+  //     } finally {
+  //       setIsloading(false);
+  //     }
+  //   }
+  // }
 
   notifyWarning = text => {
     Notify.warning(`${text}`);

@@ -23,52 +23,42 @@ export const App = () => {
   // const [error, setError] = useState(null);
   const [total, setTotal] = useState(null);
 
-   useEffect(() => {
+  useEffect(() => {
     if (searchValue === '') {
       return;
     }
     setIsloading(true);
 
-     try {
-      const response = fetchImages(searchValue, page);
+    fetchImages(searchValue, page)
+      .then(response => {
+        if (response.total === 0) {
+          return notifyWarning(
+            'Sorry, nothing was found for your request, try something else.'
+          );
+        }
 
-      if (response.total === 0) {
-        return notifyWarning(
-          'Sorry, nothing was found for your request, try something else.'
-        );
-      }
+        if (page < 2) {
+          setImages([...response.hits]);
+          return setTotal(response.total);
+        }
 
-        setImages([response.hits]);
-        setTotal(response.total);
-
-      if (searchValue) {
-        console.log('Пуш в масив => searchValue, imagesArr:', response)
-        
-        setImages([response.hits]);
-        setTotal(response.total);
-        return;
-      }
-
-      // const newPage = response.hits;
-      // console.log('Arr newPage', newPage);
-      // return setImages(prevState => [...prevState, ...newPage]);
-    } catch (error) {
-      // setError(error);
-      notifyError(error);
-
-      return console.log(error);
-    } finally {
-      setIsloading(false);
-    }
+        const newPage = response.hits;
+        return setImages(prevState => [...prevState, ...newPage]);
+      })
+      .catch(error => {
+        // setError(error);
+        notifyError(error);
+        return console.log(error);
+      })
+      .finally(() => {
+        setIsloading(false);
+      });
   }, [searchValue, page]);
-
 
   const onSubmit = value => {
     if (value !== searchValue) {
-      console.log('onSubmit');
       setSearchValue(value);
       setPage(1);
-      console.log('onSubmit', value, page);
     }
   };
 
