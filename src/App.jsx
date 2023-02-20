@@ -30,19 +30,19 @@ export const App = () => {
     setIsloading(true);
 
     fetchImages(searchValue, page)
-      .then(response => {
-        if (response.total === 0) {
+      .then(({total, hits}) => {
+        if (total === 0) {
           return notifyWarning(
             'Sorry, nothing was found for your request, try something else.'
           );
         }
 
         if (page < 2) {
-          setImages([...response.hits]);
-          return setTotal(response.total);
+          setImages([...hits]);
+          return setTotal(total);
         }
 
-        const newPage = response.hits;
+        const newPage = hits;
         return setImages(prevState => [...prevState, ...newPage]);
       })
       .catch(error => {
