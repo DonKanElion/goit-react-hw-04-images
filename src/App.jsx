@@ -23,41 +23,35 @@ export const App = () => {
   // const [error, setError] = useState(null);
   const [total, setTotal] = useState(null);
 
-  // state = {
-  //   // status: [],
-  //   page: 1,
-  //   searchValue: '',
-  //   images: [],
-  //   isLoading: false,
-  //   error: null,
-  //   total: null,
-  // };
-
-  useEffect(() => {
+   useEffect(() => {
     if (searchValue === '') {
       return;
     }
-
     setIsloading(true);
 
-    try {
+     try {
       const response = fetchImages(searchValue, page);
 
       if (response.total === 0) {
-        notifyWarning(
+        return notifyWarning(
           'Sorry, nothing was found for your request, try something else.'
         );
       }
 
+        setImages([response.hits]);
+        setTotal(response.total);
+
       if (searchValue) {
+        console.log('Пуш в масив => searchValue, imagesArr:', response)
+        
         setImages([response.hits]);
         setTotal(response.total);
         return;
       }
 
-      const newPage = response.hits;
-
-      return setImages(prevState => [...prevState, ...newPage]);
+      // const newPage = response.hits;
+      // console.log('Arr newPage', newPage);
+      // return setImages(prevState => [...prevState, ...newPage]);
     } catch (error) {
       // setError(error);
       notifyError(error);
@@ -68,46 +62,13 @@ export const App = () => {
     }
   }, [searchValue, page]);
 
-  // async componentDidUpdate(_, prevState) {
-
-  //   if (prevState.searchValue !== searchValue || prevState.page !== page) {
-  //     setIsloading(true);
-
-  //     try {
-  //       const response = await fetchImages(searchValue, page);
-
-  //       if (response.total === 0) {
-  //         notifyWarning(
-  //           'Sorry, nothing was found for your request, try something else.'
-  //         );
-  //       }
-
-  //       if (prevState.searchValue !== searchValue) {
-
-  //         setImages([response.hits]);
-  //         setTotal(response.total);
-  //        return;
-  //       }
-
-  //       const newPage = response.hits;
-
-  //       return setImages(prevState => ([...prevState, ...newPage]
-  //       ));
-  //     } catch (error) {
-  //       notifyError();
-  //       return console.log(error);
-  //     } finally {
-  //       setIsloading(false);
-  //     }
-  //   }
-  // }
 
   const onSubmit = value => {
     if (value !== searchValue) {
-      console.log('onSubmit')
+      console.log('onSubmit');
       setSearchValue(value);
       setPage(1);
-      console.log('onSubmit', value, page)
+      console.log('onSubmit', value, page);
     }
   };
 
